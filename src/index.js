@@ -1,5 +1,5 @@
 import readXmlFromFile from './functions/readXmlFromFile.js';
-import parseXml from './functions/parseXml.js';
+import Database from './classes/Database.js';
 
 const [, , inputFile] = process.argv;
 
@@ -9,7 +9,7 @@ if (inputFile === undefined) {
 
 (async () => {
   const xmlData = await readXmlFromFile(inputFile);
-  const obj = parseXml(xmlData);
+  const database = new Database(xmlData);
 
-  console.log(obj);
+  
 })();
