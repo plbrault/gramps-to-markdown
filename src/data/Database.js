@@ -145,23 +145,24 @@ function createEvents(objects) {
 
 /* eslint-enable no-param-reassign */
 
+function prepareData(xmlData) {
+  const rawData = parseXml(xmlData);
+  const objects = createObjects(rawData);
+
+  const people = createPeople(objects);
+  const events = createEvents(objects);
+
+  const data = rawData;
+  return data;
+}
+
 class Database {
   #data;
 
   constructor(xmlData) {
-    this.#prepareDatabase(xmlData);
+    this.#data = prepareData(xmlData);
 
     // console.log(this.#data.database.people);
-  }
-
-  #prepareDatabase(xmlData) {
-    const rawData = parseXml(xmlData);
-    const objects = createObjects(rawData);
-
-    const people = createPeople(objects);
-    const events = createEvents(objects);
-
-    this.#data = rawData;
   }
 }
 
