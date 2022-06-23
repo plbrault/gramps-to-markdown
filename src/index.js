@@ -1,6 +1,5 @@
-import { XMLParser } from 'fast-xml-parser';
-
 import readXmlFromFile from './functions/readXmlFromFile.js';
+import parseXml from './functions/parseXml.js';
 
 const [, , inputFile] = process.argv;
 
@@ -8,11 +7,9 @@ if (inputFile === undefined) {
   console.error('Input argument missing.');
 }
 
-const xmlParser = new XMLParser();
-
 (async () => {
   const xmlData = await readXmlFromFile(inputFile);
-  const obj = xmlParser.parse(xmlData);
+  const obj = parseXml(xmlData);
 
   console.log(obj);
 })();
