@@ -1,5 +1,5 @@
-import readXmlFromFile from './readXmlFromFile.js';
-import Database from './Database.js';
+import readXmlFromFile from './data/readXmlFromFile.js';
+import Database from './data/Database.js';
 
 const [, , inputFile] = process.argv;
 
