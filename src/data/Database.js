@@ -219,6 +219,28 @@ function createPlaces(objects) {
   return places;
 }
 
+function createCitations(objects) {
+  const citations = [];
+
+  Object.values(objects)
+    .filter(({ type }) => type === 'citation')
+    .forEach((citation) => {
+      Object.assign(citation.data, {
+        id: citation.raw.id,
+        change: citation.raw.change,
+        source: objects[citation.raw.sourceref.hlink].data,
+      });
+
+      if (citation.raw.page) {
+        citation.data.page = citation.raw.page['#text'];
+      }
+
+      citations.push(citation.data);
+    });
+
+  return citations;
+}
+
 /* eslint-enable no-param-reassign */
 
 function prepareData(xmlData) {
@@ -228,8 +250,9 @@ function prepareData(xmlData) {
   const people = createPeople(objects);
   const events = createEvents(objects);
   const places = createPlaces(objects);
+  const citations = createCitations(objects);
 
-  console.log(places[0]);
+  console.log(people[0]);
 
   const data = rawData;
   return data;
