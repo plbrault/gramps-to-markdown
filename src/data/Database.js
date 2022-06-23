@@ -9,6 +9,7 @@ function parseXml(xmlData) {
     'database.people.person.eventref',
     'database.people.person.citationref',
     'database.people.person.parentin',
+    'database.people.person.childof',
     'database.people.person.noteref',
     'database.events.event.citationref',
     'database.places.placeobj.pname',
@@ -31,11 +32,12 @@ function createObjects(rawData) {
     .filter((key) => ['events', 'people', 'families', 'citations', 'sources', 'places', 'notes'].includes(key))
     .forEach((key) => {
       const objType = Object.keys(rawData.database[key])[0];
-      rawData.database[key][objType].forEach((obj) => {
-        objects[obj.handle] = {
-          handle: obj.handle, type: objType, raw: obj, data: {},
-        };
-      });
+      rawData.database[key][objType]
+        .forEach((obj) => {
+          objects[obj.handle] = {
+            handle: obj.handle, type: objType, raw: obj, data: { isPrivate: !!obj.priv },
+          };
+        });
     });
 
   return objects;
@@ -103,6 +105,7 @@ function createPeople(objects) {
         events: [],
         citations: [],
         parentIn: [],
+        childOf: [],
         notes: [],
       });
 
@@ -122,7 +125,9 @@ function createPeople(objects) {
         });
       }
       if (person.raw.childof) {
-        person.data.childOf = objects[person.raw.childof.hlink].data;
+        person.raw.childof.forEach(({ hlink }) => {
+          person.data.childOf.push(objects[hlink].data);
+        });
       }
       if (person.raw.parentin) {
         person.raw.parentin.forEach(({ hlink }) => {
@@ -197,7 +202,7 @@ function prepareData(xmlData) {
   const events = createEvents(objects);
   const places = createPlaces(objects);
 
-  //console.log(events);
+  console.log(events);
 
   const data = rawData;
   return data;
