@@ -59,7 +59,7 @@ function createPeople(objects) {
       person.data = {
         id: person.raw.id,
         change: person.raw.change,
-        gender: person.gender,
+        gender: person.raw.gender['#text'],
         names: [],
         events: [],
         citations: [],
@@ -67,16 +67,11 @@ function createPeople(objects) {
         notes: [],
       };
 
-      console.log(person.raw.name);
+      person.raw.name.forEach(name => {
+        person.data.names.push(createName(name));
+      });
 
-      if (Array.isArray(person.raw.name)) {
-        person.raw.name.forEach(name => {
-          createName(name);
-        });
-      } else {
-
-      }
-
+      console.log(person.data);
       people.push(person.data);
     });
 
