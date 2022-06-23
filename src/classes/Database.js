@@ -7,6 +7,7 @@ function parseXml(xmlData) {
     'database.people.person.citationref',
     'database.people.person.parentin',
     'database.people.person.noteref',
+    'database.events.event.citationref',
   ];
   const xmlParser = new XMLParser({
     ignoreAttributes: false,
@@ -58,7 +59,7 @@ function createPeople(objects) {
   Object.values(objects)
     .filter(({ type }) => type === 'person')
     .forEach(person => {
-      person.data = {
+      Object.assign(person.data, {
         id: person.raw.id,
         change: person.raw.change,
         gender: person.raw.gender['#text'],
@@ -67,7 +68,7 @@ function createPeople(objects) {
         citations: [],
         parentIn: [],
         notes: [],
-      };
+      });
 
       if (person.raw.name) {
         person.raw.name.forEach(name => {
@@ -104,6 +105,40 @@ function createPeople(objects) {
   return people;
 }
 
+function createEvents(objects) {
+  const events = [];
+
+  Object.values(objects)
+    .filter(({ type }) => type === 'event')
+    .forEach(event => {
+      Object.assign(event.data, {
+        id: event.raw.id,
+        change: event.raw.change,
+        type: event.raw.type['#text'],
+        citations: [],
+      });
+
+      if (event.raw.dateval) {
+        event.data.dateval = event.raw.dateval;
+      }
+      if (event.raw.place) {
+        event.data.place = objects[event.raw.place.hlink].data;
+      }
+      if (event.raw.description) {
+        event.data.description = event.raw.description['#text'];
+      }
+      if (event.raw.citationref) {
+        event.raw.citationref.forEach(({ hlink }) => {
+          event.data.citations.push(objects[hlink].data);
+        });
+      }
+
+      events.push(event.data);
+    });
+
+  return events;
+}
+
 class Database {
   #data;
 
@@ -120,6 +155,9 @@ class Database {
     //console.log(objects);
 
     const people = createPeople(objects);
+    const events = createEvents(objects);
+
+    //console.log(people[0]);
   
     this.#data = rawData;
   }
