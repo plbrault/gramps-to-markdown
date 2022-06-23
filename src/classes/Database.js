@@ -1,5 +1,19 @@
 import { XMLParser } from 'fast-xml-parser';
 
+function parseXml(xmlData) {
+  const isAlwaysArray = [
+    'database.people.person.name',
+  ];
+  const xmlParser = new XMLParser({
+    ignoreAttributes: false,
+    attributeNamePrefix: '',
+    alwaysCreateTextNode: true,
+    isArray: (name, jpath) => isAlwaysArray.includes(jpath),
+  });
+
+  return xmlParser.parse(xmlData);
+}
+
 function createObjects(rawData) {
   const objects = {};
 
@@ -53,6 +67,8 @@ function createPeople(objects) {
         notes: [],
       };
 
+      console.log(person.raw.name);
+
       if (Array.isArray(person.raw.name)) {
         person.raw.name.forEach(name => {
           createName(name);
@@ -77,9 +93,7 @@ class Database {
   }
 
   #prepareDatabase(xmlData) {
-    const xmlParser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '', alwaysCreateTextNode: true });
-    const rawData = xmlParser.parse(xmlData);
-
+    const rawData = parseXml(xmlData);
     const objects = createObjects(rawData);
 
     //console.log(objects);
