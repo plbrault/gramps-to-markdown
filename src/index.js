@@ -1,8 +1,6 @@
-import fs from 'fs';
-import gzip from 'node-gzip';
 import { XMLParser } from 'fast-xml-parser';
 
-const { ungzip } = gzip;
+import readXmlFromFile from './functions/readXmlFromFile.js';
 
 const [, , inputFile] = process.argv;
 
@@ -13,9 +11,7 @@ if (inputFile === undefined) {
 const xmlParser = new XMLParser();
 
 (async () => {
-  const compressedXmlData = fs.readFileSync(inputFile);
-  const xmlDataBuffer = await ungzip(compressedXmlData);
-  const xmlData = xmlDataBuffer.toString();
+  const xmlData = await readXmlFromFile(inputFile);
   const obj = xmlParser.parse(xmlData);
 
   console.log(obj);
