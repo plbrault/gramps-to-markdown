@@ -7,9 +7,5 @@ if (inputFile === undefined) {
   console.error('Input argument missing.');
 }
 
-(async () => {
-  const xmlData = await readXmlFromFile(inputFile);
-  const database = new Database(xmlData);
-
-  
-})();
+const xmlData = await readXmlFromFile(inputFile);
+const database = new Database(xmlData);
