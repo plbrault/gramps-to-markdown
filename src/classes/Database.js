@@ -15,6 +15,58 @@ function createObjects(rawData) {
   return objects;
 }
 
+function createName(nameRawData) {
+  const name = {
+    type: nameRawData.type,
+    parts: [],
+    preferred: !nameRawData.alt,
+  };
+  if (nameRawData.first) {
+    name.parts.push({ partType: 'first', value: nameRawData.first['#text'] });
+  }
+  if (nameRawData.surname) {
+    const namePart = { partType: 'surname', value: nameRawData.surname['#text'] };
+    if (nameRawData.surname.derivation) {
+      namePart.derivation = nameRawData.surname.derivation;
+    }
+    name.parts.push(namePart);
+  }
+  return name;
+}
+
+function createPeople(objects) {
+  const people = [];
+
+  Object.values(objects)
+    .filter(({ type }) => type === 'person')
+    .forEach(person => {
+      //console.log(person);
+
+      person.data = {
+        id: person.raw.id,
+        change: person.raw.change,
+        gender: person.gender,
+        names: [],
+        events: [],
+        citations: [],
+        parentIn: [],
+        notes: [],
+      };
+
+      if (Array.isArray(person.raw.name)) {
+        person.raw.name.forEach(name => {
+          createName(name);
+        });
+      } else {
+
+      }
+
+      people.push(person.data);
+    });
+
+  return people;
+}
+
 class Database {
   #data;
 
@@ -25,12 +77,14 @@ class Database {
   }
 
   #prepareDatabase(xmlData) {
-    const xmlParser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '' });
+    const xmlParser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '', alwaysCreateTextNode: true });
     const rawData = xmlParser.parse(xmlData);
 
     const objects = createObjects(rawData);
 
-    console.log(objects);
+    //console.log(objects);
+
+    const people = createPeople(objects);
   
     this.#data = rawData;
   }
