@@ -143,6 +143,18 @@ function createEvents(objects) {
   return events;
 }
 
+function createPlaces(objects) {
+  const places = [];
+
+  Object.values(objects)
+    .filter(({ type }) => type === 'placeobj')
+    .forEach((place) => {
+      console.log(place);
+    });
+
+  return places;
+}
+
 /* eslint-enable no-param-reassign */
 
 function prepareData(xmlData) {
@@ -151,6 +163,9 @@ function prepareData(xmlData) {
 
   const people = createPeople(objects);
   const events = createEvents(objects);
+  const places = createPlaces(objects);
+
+  //console.log(events);
 
   const data = rawData;
   return data;
