@@ -186,7 +186,34 @@ function createPlaces(objects) {
   Object.values(objects)
     .filter(({ type }) => type === 'placeobj')
     .forEach((place) => {
-     // console.log(place);
+      Object.assign(place.data, {
+        id: place.raw.id,
+        change: place.raw.change,
+        type: place.raw.type,
+        names: [],
+        partOf: [],
+      });
+
+      if (place.raw.ptitle) {
+        place.data.title = place.raw.ptitle['#text'];
+      }
+      place.raw.pname.forEach((pname) => {
+        const placeName = {};
+        if (pname.value) {
+          placeName.value = pname.value;
+        }
+        if (pname.lang) {
+          placeName.lang = pname.lang;
+        }
+        place.data.names.push(placeName);
+      });
+      if (place.raw.placeref) {
+        place.raw.placeref.forEach(({ hlink }) => {
+          place.data.partOf.push(objects[hlink].data);
+        });
+      }
+
+      places.push(place.data);
     });
 
   return places;
@@ -202,7 +229,7 @@ function prepareData(xmlData) {
   const events = createEvents(objects);
   const places = createPlaces(objects);
 
-  console.log(events);
+  console.log(places[0]);
 
   const data = rawData;
   return data;
