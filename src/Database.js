@@ -1,5 +1,7 @@
 import { XMLParser } from 'fast-xml-parser';
 
+/* eslint-disable no-param-reassign */
+
 function parseXml(xmlData) {
   const isAlwaysArray = [
     'database.people.person.name',
@@ -23,11 +25,13 @@ function createObjects(rawData) {
   const objects = {};
 
   Object.keys(rawData.database)
-    .filter(key => ['events', 'people', 'families', 'citations', 'sources', 'places', 'notes'].includes(key))
-    .forEach(key => {
+    .filter((key) => ['events', 'people', 'families', 'citations', 'sources', 'places', 'notes'].includes(key))
+    .forEach((key) => {
       const objType = Object.keys(rawData.database[key])[0];
-      rawData.database[key][objType].forEach(obj => {
-        objects[obj.handle] = { handle: obj.handle, type: objType, raw: obj, data: {} };
+      rawData.database[key][objType].forEach((obj) => {
+        objects[obj.handle] = {
+          handle: obj.handle, type: objType, raw: obj, data: {},
+        };
       });
     });
 
@@ -58,7 +62,7 @@ function createPeople(objects) {
 
   Object.values(objects)
     .filter(({ type }) => type === 'person')
-    .forEach(person => {
+    .forEach((person) => {
       Object.assign(person.data, {
         id: person.raw.id,
         change: person.raw.change,
@@ -71,7 +75,7 @@ function createPeople(objects) {
       });
 
       if (person.raw.name) {
-        person.raw.name.forEach(name => {
+        person.raw.name.forEach((name) => {
           person.data.names.push(createName(name));
         });
       }
@@ -83,7 +87,7 @@ function createPeople(objects) {
       if (person.raw.citationref) {
         person.raw.citationref.forEach(({ hlink }) => {
           person.data.citations.push(objects[hlink].data);
-        })
+        });
       }
       if (person.raw.childof) {
         person.data.childOf = objects[person.raw.childof.hlink].data;
@@ -96,7 +100,7 @@ function createPeople(objects) {
       if (person.raw.noteref) {
         person.raw.noteref.forEach(({ hlink }) => {
           person.data.notes.push(objects[hlink].data);
-        })
+        });
       }
 
       people.push(person.data);
@@ -110,7 +114,7 @@ function createEvents(objects) {
 
   Object.values(objects)
     .filter(({ type }) => type === 'event')
-    .forEach(event => {
+    .forEach((event) => {
       Object.assign(event.data, {
         id: event.raw.id,
         change: event.raw.change,
@@ -139,26 +143,24 @@ function createEvents(objects) {
   return events;
 }
 
+/* eslint-enable no-param-reassign */
+
 class Database {
   #data;
 
   constructor(xmlData) {
     this.#prepareDatabase(xmlData);
 
-    //console.log(this.#data.database.people);
+    // console.log(this.#data.database.people);
   }
 
   #prepareDatabase(xmlData) {
     const rawData = parseXml(xmlData);
     const objects = createObjects(rawData);
 
-    //console.log(objects);
-
     const people = createPeople(objects);
     const events = createEvents(objects);
 
-    //console.log(people[0]);
-  
     this.#data = rawData;
   }
 }
