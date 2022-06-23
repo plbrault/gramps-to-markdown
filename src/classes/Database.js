@@ -3,6 +3,9 @@ import { XMLParser } from 'fast-xml-parser';
 function parseXml(xmlData) {
   const isAlwaysArray = [
     'database.people.person.name',
+    'database.people.person.eventref',
+    'database.people.person.citationref',
+    'database.people.person.parentin',
   ];
   const xmlParser = new XMLParser({
     ignoreAttributes: false,
@@ -54,8 +57,6 @@ function createPeople(objects) {
   Object.values(objects)
     .filter(({ type }) => type === 'person')
     .forEach(person => {
-      //console.log(person);
-
       person.data = {
         id: person.raw.id,
         change: person.raw.change,
@@ -67,11 +68,29 @@ function createPeople(objects) {
         notes: [],
       };
 
-      person.raw.name.forEach(name => {
-        person.data.names.push(createName(name));
-      });
+      if (person.raw.name) {
+        person.raw.name.forEach(name => {
+          person.data.names.push(createName(name));
+        });
+      }
+      if (person.raw.eventref) {
+        person.raw.eventref.forEach(({ hlink }) => {
+          person.data.events.push(objects[hlink].data);
+        });
+      }
+      if (person.raw.citationref) {
+        person.raw.citationref.forEach(({ hlink }) => {
+          person.data.citations.push(objects[hlink].data);
+        })
+      }
+      if (person.raw.parentin) {
+        person.raw.parentin.forEach(({ hlink }) => {
+          person.data.parentIn.push(objects[hlink].data);
+        });
+      }
 
       console.log(person.data);
+
       people.push(person.data);
     });
 
