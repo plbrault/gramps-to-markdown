@@ -6,6 +6,7 @@ function parseXml(xmlData) {
     'database.people.person.eventref',
     'database.people.person.citationref',
     'database.people.person.parentin',
+    'database.people.person.noteref',
   ];
   const xmlParser = new XMLParser({
     ignoreAttributes: false,
@@ -83,13 +84,19 @@ function createPeople(objects) {
           person.data.citations.push(objects[hlink].data);
         })
       }
+      if (person.raw.childof) {
+        person.data.childOf = objects[person.raw.childof.hlink].data;
+      }
       if (person.raw.parentin) {
         person.raw.parentin.forEach(({ hlink }) => {
           person.data.parentIn.push(objects[hlink].data);
         });
       }
-
-      console.log(person.data);
+      if (person.raw.noteref) {
+        person.raw.noteref.forEach(({ hlink }) => {
+          person.data.notes.push(objects[hlink].data);
+        })
+      }
 
       people.push(person.data);
     });
