@@ -5,11 +5,14 @@ import { XMLParser } from 'fast-xml-parser';
 function parseXml(xmlData) {
   const isAlwaysArray = [
     'database.people.person.name',
+    'database.people.person.name.surname',
     'database.people.person.eventref',
     'database.people.person.citationref',
     'database.people.person.parentin',
     'database.people.person.noteref',
     'database.events.event.citationref',
+    'database.places.placeobj.pname',
+    'database.places.placeobj.placeref',
   ];
   const xmlParser = new XMLParser({
     ignoreAttributes: false,
@@ -47,12 +50,41 @@ function createName(nameRawData) {
   if (nameRawData.first) {
     name.parts.push({ partType: 'first', value: nameRawData.first['#text'] });
   }
+  if (nameRawData.call) {
+    name.parts.push({ partType: 'call', value: nameRawData.call['#text'] });
+  }
+  if (nameRawData.suffix) {
+    name.parts.push({ partType: 'suffix', value: nameRawData.suffix['#text'] });
+  }
+  if (nameRawData.title) {
+    name.parts.push({ partType: 'title', value: nameRawData.title['#text'] });
+  }
+  if (nameRawData.nick) {
+    name.parts.push({ partType: 'nick', value: nameRawData.nick['#text'] });
+  }
+  if (nameRawData.familynick) {
+    name.parts.push({ partType: 'familynick', value: nameRawData.familynick['#text'] });
+  }
+  if (nameRawData.group) {
+    name.parts.push({ partType: 'group', value: nameRawData.group['#text'] });
+  }
   if (nameRawData.surname) {
-    const namePart = { partType: 'surname', value: nameRawData.surname['#text'] };
-    if (nameRawData.surname.derivation) {
-      namePart.derivation = nameRawData.surname.derivation;
-    }
-    name.parts.push(namePart);
+    nameRawData.surname.forEach((surname) => {
+      const namePart = { partType: 'surname', value: surname['#text'] };
+      if (surname.prefix) {
+        namePart.derivation = surname.prefix;
+      }
+      if (surname.prim) {
+        namePart.derivation = surname.prim;
+      }
+      if (surname.derivation) {
+        namePart.derivation = surname.derivation;
+      }
+      if (surname.connector) {
+        namePart.connector = surname.connector;
+      }
+      name.parts.push(namePart);
+    });
   }
   return name;
 }
@@ -149,7 +181,7 @@ function createPlaces(objects) {
   Object.values(objects)
     .filter(({ type }) => type === 'placeobj')
     .forEach((place) => {
-      console.log(place);
+     // console.log(place);
     });
 
   return places;
