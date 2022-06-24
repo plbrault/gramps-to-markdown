@@ -9,14 +9,18 @@ import notesTpl from './notesTpl.js';
 // eslint-disable-next-line
 const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
 
-export default (person) => {
+export default (person, { createLink }) => {
   const name = nameTpl(findPreferredName(person));
   const birth = eventTpl(findEvent(person, 'Birth'));
   const death = eventTpl(findEvent(person, 'Death'));
-  const fatherName = nameTpl(findPreferredName(person.childOf[0]?.father));
-  const motherName = nameTpl(findPreferredName(person.childOf[0]?.mother));
+  const fatherName = createLink(person.childOf[0]?.father,
+    nameTpl(findPreferredName(person.childOf[0]?.father)),
+  );
+  const motherName = createLink(person.childOf[0]?.mother,
+    nameTpl(findPreferredName(person.childOf[0]?.mother))
+  );
   const notes = notesTpl(person.notes);
-  const families = familiesTpl(person.parentIn, person);
+  const families = familiesTpl(person.parentIn, person, { createLink });
 
   let formattedOtherNames = '';
   const otherNames = person.names.filter(({ preferred }) => !preferred);
