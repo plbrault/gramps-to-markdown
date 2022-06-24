@@ -1,6 +1,6 @@
 import placeTpl from './placeTpl.js';
 
-export default (event) => {
+export default (event, { t }) => {
   let formattedEvent = '';
 
   if (event) {
@@ -9,12 +9,12 @@ export default (event) => {
     }
     if (event.dateVal) {
       if (event.dateVal.type) {
-        formattedEvent += `**${event.dateVal.type}** `;
+        formattedEvent += `**${t(event.dateVal.type)}** `;
       }
       formattedEvent += `**${event.dateVal.val}** `;
     }
     if (event.place) {
-      formattedEvent += `in **${placeTpl(event.place)}**`;
+      formattedEvent += `${t('in')} **${placeTpl(event.place)}**`;
     }
   } else {
     formattedEvent = '**Unknown**';
