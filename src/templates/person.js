@@ -1,49 +1,26 @@
+import findEvent from './utilities/findEvent.js';
+import findPreferredName from './utilities/findPreferredName.js';
 import formatEvent from './utilities/formatEvent.js';
 import formatName from './utilities/formatName.js';
-import findPreferredName from './utilities/findPreferredName.js';
 
 export default ({ person }) => {
-  const formattedName = formatName(findPreferredName(person));
+  const name = formatName(findPreferredName(person));
+  const birth = formatEvent(findEvent(person, 'Birth'));
+  const death = formatEvent(findEvent(person, 'Death'));
+  const fatherName = formatName(findPreferredName(person.childOf[0]?.father));
+  const motherName = formatName(findPreferredName(person.childOf[0]?.mother));
 
-  const birth = person.events.find(({ type }) => type === 'Birth');
-  let formattedBirth;
-  if (birth) {
-    formattedBirth = formatEvent(birth);
-  } else {
-    formattedBirth = '**Unknown**';
-  }
-
-  const death = person.events.find(({ type }) => type === 'Death');
-  let formattedDeath;
-  if (death) {
-    formattedDeath = formatEvent(death);
-  } else {
-    formattedDeath = '**Unknown**';
-  }
-
-  const father = person.childOf[0]?.father;
-  let formattedFatherName = '**Unknown**';
-  if (father) {
-    formattedFatherName = formatName(findPreferredName(father));
-  }
-
-  const mother = person.childOf[0]?.mother;
-  let formattedMotherName = '**Unknown**';
-  if (mother) {
-    formattedMotherName = formatName(findPreferredName(mother));
-  }
-
-  return (`# ${formattedName}
+  return (`# ${name}
 
 ## Life Events  
 
-  * 🎂 Birth: ${formattedBirth}
-  * 🪦 Death: ${formattedDeath}
+  * 🎂 Birth: ${birth}
+  * 🪦 Death: ${death}
 
 ## Parents
 
-  * 👨 Father: **${formattedFatherName}**
-  * 👩 Mother: **${formattedMotherName}**
+  * 👨 Father: ${fatherName}
+  * 👩 Mother: **${motherName}**
 
 ## Families
 
