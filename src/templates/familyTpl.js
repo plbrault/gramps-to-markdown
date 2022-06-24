@@ -16,7 +16,7 @@ export default (family, mainPerson) => {
     family.children.forEach((child) => {
       formattedChildren += `\n  * ${nameTpl(findPreferredName(child))}`;
     });
-    formattedChildren += '\n';
+    formattedChildren += '\n\n';
   }
 
   let formattedEvents = '';
@@ -30,7 +30,7 @@ export default (family, mainPerson) => {
     otherEvents.forEach((event) => {
       formattedEvents += `\n  * ${event.type}: ${eventTpl(event)}`;
     });
-    formattedEvents += '\n';
+    formattedEvents += '\n\n';
   }
 
   return (

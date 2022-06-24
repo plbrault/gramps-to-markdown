@@ -19,6 +19,6 @@ console.log(personTpl(database.getPerson('I0126')));
 console.log('------');
 console.log(personTpl(database.getPerson('I0354')));
 
-const test = personTpl(database.getPerson('I0354'));
+const test = personTpl(database.getPerson('I0018'));
 
 fs.writeFile('testData/test.md', test, 'utf8', () => {});

@@ -79,6 +79,17 @@ export default (person) => {
           formattedSources += source.pubInfo;
         }
       }
+      const sourceCitations = allCitations.filter(
+        ({ source: citationSource, page }) => citationSource === source && page,
+      );
+      sourceCitations.forEach((citation) => {
+        formattedSources += '\n    * ';
+        if (typeof citation.page === 'string' && citation.page.match(urlRegex)) {
+          formattedSources += `[${citation.page}](${citation.page})`;
+        } else {
+          formattedSources += citation.page;
+        }
+      });
     });
   }
 
@@ -86,7 +97,6 @@ export default (person) => {
     /* eslint-disable indent */
 `# ${name}
 ${formattedOtherNames}
-
 ## Life Events  
 
   * 🎂 Birth: ${birth}
