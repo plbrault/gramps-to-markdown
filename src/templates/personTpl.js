@@ -46,6 +46,17 @@ export default (person) => {
   });
   allCitations = [...new Set(allCitations)];
 
+  let allSources = [];
+  allCitations.forEach((citation) => {
+    allSources.push(citation.source);
+  });
+  allSources = [...new Set(allSources)];
+
+  let formattedSources = '';
+  if (allSources.length > 0) {
+    formattedSources += '## Sources\n';
+  }
+
   return (
     /* eslint-disable indent */
 `# ${name}
@@ -61,9 +72,7 @@ ${formattedOtherNames}
   * 👨 Father: ${fatherName}
   * 👩 Mother: ${motherName}
 
-${notes}${families}
-
-`
+${notes}${families}${formattedSources}`
     /* eslint-enable indent */
   );
 };

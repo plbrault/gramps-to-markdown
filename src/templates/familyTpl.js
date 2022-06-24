@@ -10,6 +10,15 @@ export default (family, mainPerson) => {
   const otherPersonName = nameTpl(findPreferredName(otherPerson));
   const notes = notesTpl(family.notes, { titleMarkdown: '####' });
 
+  let formattedChildren = '';
+  if (family.children.length > 0) {
+    formattedChildren += '#### Children\n';
+    family.children.forEach((child) => {
+      formattedChildren += `\n  * ${nameTpl(findPreferredName(child))}`;
+    });
+    formattedChildren += '\n';
+  }
+
   let formattedEvents = '';
   if (family.events.length > 0) {
     formattedEvents += '#### Family Events\n';
@@ -24,20 +33,11 @@ export default (family, mainPerson) => {
     formattedEvents += '\n';
   }
 
-  let formattedChildren = '';
-  if (family.children.length > 0) {
-    formattedChildren += '#### Children\n';
-    family.children.forEach((child) => {
-      formattedChildren += `\n  * ${nameTpl(findPreferredName(child))}`;
-    });
-  }
-
   return (
     /* eslint-disable indent */
 `### With ${otherPersonName}
 
-${formattedEvents}${formattedChildren}${notes}
-`
+${formattedEvents}${formattedChildren}${notes}`
     /* eslint-enable indent */
   );
 };

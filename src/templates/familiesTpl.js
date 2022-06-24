@@ -8,7 +8,6 @@ export default (families, mainPerson) => {
     families.forEach((family) => {
       formattedFamilies += `\n\n${familyTpl(family, mainPerson)}`;
     });
-    formattedFamilies += '\n\n';
   }
 
   return formattedFamilies;
