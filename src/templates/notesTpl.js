@@ -1,8 +1,8 @@
-export default (notes) => {
+export default (notes, { titleMarkdown = '##' } = {}) => {
   let formattedNotes = '';
 
   if (notes.length > 0) {
-    formattedNotes += '## Notes';
+    formattedNotes += `\n${titleMarkdown} Notes`;
     notes.forEach(({ text }) => {
       formattedNotes += `\n\n${text}`;
     });

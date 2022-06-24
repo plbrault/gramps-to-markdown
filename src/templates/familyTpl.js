@@ -3,10 +3,12 @@ import findPreferredName from './utilities/findPreferredName.js';
 
 import eventTpl from './eventTpl.js';
 import nameTpl from './nameTpl.js';
+import notesTpl from './notesTpl.js';
 
 export default (family, mainPerson) => {
   const otherPerson = (mainPerson === family.father ? family.mother : family.father);
   const otherPersonName = nameTpl(findPreferredName(otherPerson));
+  const notes = notesTpl(family.notes, { titleMarkdown: '####' });
 
   let formattedEvents = '';
   if (family.events.length > 0) {
@@ -19,14 +21,14 @@ export default (family, mainPerson) => {
     otherEvents.forEach((event) => {
       formattedEvents += `\n  * ${event.type}: ${eventTpl(event)}`;
     });
+    formattedEvents += '\n';
   }
-
 
   return (
     /* eslint-disable indent */
 `### With ${otherPersonName}
 
-${formattedEvents}
+${formattedEvents}${notes}
 `
     /* eslint-enable indent */
   );
