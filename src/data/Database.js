@@ -241,6 +241,33 @@ function createCitations(objects) {
   return citations;
 }
 
+function createSources(objects) {
+  const sources = [];
+
+  Object.values(objects)
+    .filter(({ type }) => type === 'source')
+    .forEach((source) => {
+      Object.assign(source.data, {
+        id: source.raw.id,
+        change: source.raw.change,
+      });
+
+      if (source.raw.stitle) {
+        source.data.title = source.raw.stitle['#text'];
+      }
+      if (source.raw.sauthor) {
+        source.data.author = source.raw.sauthor['#text'];
+      }
+      if (source.raw.spubinfo) {
+        source.data.pubInfo = source.raw.spubinfo['#text'];
+      }
+
+      sources.push(source.data);
+    });
+
+  return sources;
+}
+
 /* eslint-enable no-param-reassign */
 
 function prepareData(xmlData) {
@@ -251,8 +278,9 @@ function prepareData(xmlData) {
   const events = createEvents(objects);
   const places = createPlaces(objects);
   const citations = createCitations(objects);
+  const sources = createSources(objects);
 
-  console.log(people[0]);
+  console.log(sources);
 
   const data = rawData;
   return data;
