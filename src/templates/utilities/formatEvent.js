@@ -1,0 +1,3 @@
+function formatEvent(event) {
+
+};

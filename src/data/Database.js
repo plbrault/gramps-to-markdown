@@ -198,9 +198,6 @@ function createPlaces(objects, { includePrivateData }) {
         partOf: [],
       });
 
-      if (place.raw.ptitle) {
-        place.data.title = place.raw.ptitle['#text'];
-      }
       place.raw.pname.forEach((pname) => {
         const placeName = {};
         if (pname.value) {
