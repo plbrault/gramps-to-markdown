@@ -78,10 +78,10 @@ function createName(nameRawData) {
     nameRawData.surname.forEach((surname) => {
       const namePart = { partType: 'surname', value: surname['#text'] };
       if (surname.prefix) {
-        namePart.derivation = surname.prefix;
+        namePart.prefix = surname.prefix;
       }
       if (surname.prim) {
-        namePart.derivation = surname.prim;
+        namePart.prim = surname.prim;
       }
       if (surname.derivation) {
         namePart.derivation = surname.derivation;
