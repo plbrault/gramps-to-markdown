@@ -95,11 +95,11 @@ function createName(nameRawData) {
   return name;
 }
 
-function createPeople(objects) {
+function createPeople(objects, { includePrivateData }) {
   const people = [];
 
   Object.values(objects)
-    .filter(({ type }) => type === 'person')
+    .filter(({ type, data: { isPrivate } }) => type === 'person' && (!isPrivate || includePrivateData))
     .forEach((person) => {
       Object.assign(person.data, {
         id: person.raw.id,
@@ -150,11 +150,11 @@ function createPeople(objects) {
   return people;
 }
 
-function createEvents(objects) {
+function createEvents(objects, { includePrivateData }) {
   const events = [];
 
   Object.values(objects)
-    .filter(({ type }) => type === 'event')
+    .filter(({ type, data: { isPrivate } }) => type === 'event' && (!isPrivate || includePrivateData))
     .forEach((event) => {
       Object.assign(event.data, {
         id: event.raw.id,
@@ -184,11 +184,11 @@ function createEvents(objects) {
   return events;
 }
 
-function createPlaces(objects) {
+function createPlaces(objects, { includePrivateData }) {
   const places = [];
 
   Object.values(objects)
-    .filter(({ type }) => type === 'placeobj')
+    .filter(({ type, data: { isPrivate } }) => type === 'placeobj' && (!isPrivate || includePrivateData))
     .forEach((place) => {
       Object.assign(place.data, {
         id: place.raw.id,
@@ -223,11 +223,11 @@ function createPlaces(objects) {
   return places;
 }
 
-function createCitations(objects) {
+function createCitations(objects, { includePrivateData }) {
   const citations = [];
 
   Object.values(objects)
-    .filter(({ type }) => type === 'citation')
+    .filter(({ type, data: { isPrivate } }) => type === 'citation' && (!isPrivate || includePrivateData))
     .forEach((citation) => {
       Object.assign(citation.data, {
         id: citation.raw.id,
@@ -245,11 +245,11 @@ function createCitations(objects) {
   return citations;
 }
 
-function createSources(objects) {
+function createSources(objects, { includePrivateData }) {
   const sources = [];
 
   Object.values(objects)
-    .filter(({ type }) => type === 'source')
+    .filter(({ type, data: { isPrivate } }) => type === 'source' && (!isPrivate || includePrivateData))
     .forEach((source) => {
       Object.assign(source.data, {
         id: source.raw.id,
@@ -272,11 +272,11 @@ function createSources(objects) {
   return sources;
 }
 
-function createFamilies(objects) {
+function createFamilies(objects, { includePrivateData }) {
   const families = [];
 
   Object.values(objects)
-    .filter(({ type }) => type === 'family')
+    .filter(({ type, data: { isPrivate } }) => type === 'family' && (!isPrivate || includePrivateData))
     .forEach((family) => {
       Object.assign(family.data, {
         id: family.raw.id,
@@ -323,11 +323,11 @@ function createFamilies(objects) {
   return families;
 }
 
-function createNotes(objects) {
+function createNotes(objects, { includePrivateData }) {
   const notes = [];
 
   Object.values(objects)
-    .filter(({ type }) => type === 'note')
+    .filter(({ type, data: { isPrivate } }) => type === 'note' && (!isPrivate || includePrivateData))
     .forEach((note) => {
       Object.assign(note.data, {
         id: note.raw.id,
@@ -344,19 +344,17 @@ function createNotes(objects) {
 
 /* eslint-enable no-param-reassign */
 
-function prepareData(xmlData) {
+function prepareData(xmlData, { includePrivateData }) {
   const rawData = parseXml(xmlData);
   const objects = createObjects(rawData);
 
-  const people = createPeople(objects);
-  const events = createEvents(objects);
-  const places = createPlaces(objects);
-  const citations = createCitations(objects);
-  const sources = createSources(objects);
-  const families = createFamilies(objects);
-  const notes = createNotes(objects);
-  
-  console.log(notes);
+  const people = createPeople(objects, { includePrivateData });
+  const events = createEvents(objects, { includePrivateData });
+  const places = createPlaces(objects, { includePrivateData });
+  const citations = createCitations(objects, { includePrivateData });
+  const sources = createSources(objects, { includePrivateData });
+  const families = createFamilies(objects, { includePrivateData });
+  const notes = createNotes(objects, { includePrivateData });
 
   const data = rawData;
   return data;
@@ -365,8 +363,8 @@ function prepareData(xmlData) {
 class Database {
   #data;
 
-  constructor(xmlData) {
-    this.#data = prepareData(xmlData);
+  constructor(xmlData, { includePrivateData = false } = {}) {
+    this.#data = prepareData(xmlData, { includePrivateData });
 
     // console.log(this.#data.database.people);
   }
