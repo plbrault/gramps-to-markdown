@@ -22,14 +22,23 @@ const options = {
 const xmlData = await readXmlFromFile(inputFile);
 const database = new Database(xmlData);
 
-const createLink = getCreateLink(options);
-const translate = getTranslate({ locale: options.languages[0] });
+const translateFunctions = options.languages.map((language) => getTranslate({ locale: language }));
+const createLinkFunctions = options.languages.map((language) => getCreateLink(language, options));
 
 if (!fs.existsSync(outputDir)) {
   fs.mkdirSync(outputDir);
 }
 
 database.getPeople().forEach((person) => {
-  const markdown = personTpl(person, { createLink, t: translate });
-  fs.writeFileSync(`${outputDir}/${person.id}.md`, markdown, 'utf8');
+  if (options.languages.length === 1) {
+    const markdown = personTpl(person, {
+      createLink: createLinkFunctions[0], t: translateFunctions[0]
+    });
+    fs.writeFileSync(`${outputDir}/${person.id}.md`, markdown, 'utf8');
+  } else {
+    translateFunctions.forEach((t, id) => {
+      const markdown = personTpl(person, { createLink: createLinkFunctions[id], t });
+      fs.writeFileSync(`${outputDir}/${person.id}-${options.languages[id]}.md`, markdown, 'utf8');
+    });
+  }
 });
