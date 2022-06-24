@@ -14,6 +14,10 @@ function parseXml(xmlData) {
     'database.events.event.citationref',
     'database.places.placeobj.pname',
     'database.places.placeobj.placeref',
+    'database.families.family.eventref',
+    'database.families.family.noteref',
+    'database.families.family.childref',
+    'database.families.family.citationref',
   ];
   const xmlParser = new XMLParser({
     ignoreAttributes: false,
@@ -268,6 +272,57 @@ function createSources(objects) {
   return sources;
 }
 
+function createFamilies(objects) {
+  const families = [];
+
+  Object.values(objects)
+    .filter(({ type }) => type === 'family')
+    .forEach((family) => {
+      Object.assign(family.data, {
+        id: family.raw.id,
+        change: family.raw.change,
+        events: [],
+        children: [],
+        notes: [],
+        citations: [],
+      });
+
+      if (family.raw.rel) {
+        family.data.relationType = family.raw.rel.type;
+      }
+      if (family.raw.father) {
+        family.data.father = objects[family.raw.father.hlink].data;
+      }
+      if (family.raw.mother) {
+        family.data.mother = objects[family.raw.mother.hlink].data;
+      }
+      if (family.raw.eventref) {
+        family.raw.eventref.forEach(({ hlink }) => {
+          family.data.events.push(objects[hlink].data);
+        });
+      }
+      if (family.raw.noteref) {
+        family.raw.noteref.forEach(({ hlink }) => {
+          family.data.notes.push(objects[hlink].data);
+        });
+      }
+      if (family.raw.childref) {
+        family.raw.childref.forEach(({ hlink }) => {
+          family.data.children.push(objects[hlink].data);
+        });
+      }
+      if (family.raw.citationref) {
+        family.raw.citationref.forEach(({ hlink }) => {
+          family.data.citations.push(objects[hlink].data);
+        });
+      }
+
+      families.push(family.data);
+    });
+
+  return families;
+}
+
 /* eslint-enable no-param-reassign */
 
 function prepareData(xmlData) {
@@ -279,8 +334,9 @@ function prepareData(xmlData) {
   const places = createPlaces(objects);
   const citations = createCitations(objects);
   const sources = createSources(objects);
-
-  console.log(sources);
+  const families = createFamilies(objects);
+  
+  console.log(families);
 
   const data = rawData;
   return data;
