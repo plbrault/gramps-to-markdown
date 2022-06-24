@@ -1,7 +1,7 @@
-function getCreateLink() {
+function getCreateLink({ urlPrefix, urlExt }) {
   return (linkedObject, content) => {
     if (linkedObject) {
-      return `[${content}](${linkedObject.id}.md)`;
+      return `[${content}](${urlPrefix}${linkedObject.id}${urlExt})`;
     }
     return content;
   };
