@@ -1,7 +1,7 @@
 import findEvent from './utilities/findEvent.js';
 import findPreferredName from './utilities/findPreferredName.js';
 import eventTpl from './eventTpl.js';
-import familyTpl from './familyTpl.js';
+import familiesTpl from './familiesTpl.js';
 import nameTpl from './nameTpl.js';
 import notesTpl from './notesTpl.js';
 
@@ -12,6 +12,7 @@ export default (person) => {
   const fatherName = nameTpl(findPreferredName(person.childOf[0]?.father));
   const motherName = nameTpl(findPreferredName(person.childOf[0]?.mother));
   const notes = notesTpl(person.notes);
+  const families = familiesTpl(person.parentIn, person);
 
   let formattedOtherNames = '';
   const otherNames = person.names.filter(({ preferred }) => !preferred);
@@ -28,8 +29,8 @@ export default (person) => {
     `${markdown}\n  * ${event.type}: ${eventTpl(event)}`
   ), '');
 
-  /* eslint-disable indent */
   return (
+    /* eslint-disable indent */
 `# ${name}
 ${formattedOtherNames}
 
@@ -43,9 +44,9 @@ ${formattedOtherNames}
   * 👨 Father: ${fatherName}
   * 👩 Mother: ${motherName}
 
-${notes}## Families
+${notes}${families}
 
 `
+    /* eslint-enable indent */
   );
-  /* eslint-enable-indent */
 };
