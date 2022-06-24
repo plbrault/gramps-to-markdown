@@ -12,6 +12,8 @@ const xmlData = await readXmlFromFile(inputFile);
 const database = new Database(xmlData);
 
 console.log('------');
+console.log(personTemplate({ person: database.getPerson('I0018') }));
+console.log('------');
 console.log(personTemplate({ person: database.getPerson('I0126') }));
 console.log('------')
 console.log(personTemplate({ person: database.getPerson('I0354') }));

@@ -1,6 +1,4 @@
 export default ({ person }) => {
-  console.log(person.names[0].parts);
-
   const preferredName = person.names.find(({ preferred }) => preferred);
   const surnames = preferredName.parts.filter(({ partType }) => partType === 'surname');
   const firstName = preferredName.parts.find(({ partType }) => partType === 'first');
@@ -20,7 +18,23 @@ export default ({ person }) => {
   formattedName = formattedName.slice(0, formattedName.length - 1);
   formattedName += `, ${firstName.value}`;
 
+  const birth = person.events.find(({ type }) => type === 'Birth');
+  let formattedBirth = '';
+  if (birth) {
+    console.log(birth);
+    if (birth.dateVal) {
+      if (birth.dateVal.type) {
+        formattedBirth += `${birth.dateVal.type} `;
+      }
+      formattedBirth += `${birth.dateVal.val} `;
+    }
+  } else {
+    formattedBirth = 'Unknown';
+  }
+
   return `# ${formattedName}
  
+    * 🎂 Birth: ${formattedBirth}
+
  `;
 }

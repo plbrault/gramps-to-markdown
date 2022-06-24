@@ -164,7 +164,7 @@ function createEvents(objects, { includePrivateData }) {
       });
 
       if (event.raw.dateval) {
-        event.data.dateval = event.raw.dateval;
+        event.data.dateVal = event.raw.dateval;
       }
       if (event.raw.place) {
         event.data.place = objects[event.raw.place.hlink].data;
