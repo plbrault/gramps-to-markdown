@@ -1,4 +1,4 @@
-import formatPlace from './utilities/formatPlace.js';
+import formatEvent from './utilities/formatEvent.js';
 
 export default ({ person }) => {
   const preferredName = person.names.find(({ preferred }) => preferred);
@@ -23,16 +23,7 @@ export default ({ person }) => {
   const birth = person.events.find(({ type }) => type === 'Birth');
   let formattedBirth = '';
   if (birth) {
-    console.log(birth.place);
-    if (birth.dateVal) {
-      if (birth.dateVal.type) {
-        formattedBirth += `**${birth.dateVal.type}** `;
-      }
-      formattedBirth += `**${birth.dateVal.val}** `;
-    }
-    if (birth.place) {
-      formattedBirth += `in **${formatPlace(birth.place)}**`;
-    }
+    formattedBirth = formatEvent(birth);
   } else {
     formattedBirth = 'Unknown';
   }
