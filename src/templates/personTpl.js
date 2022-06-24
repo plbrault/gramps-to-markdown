@@ -21,16 +21,17 @@ export default (person) => {
   let formattedOtherNames = '';
   const otherNames = person.names.filter(({ preferred }) => !preferred);
   if (otherNames.length > 0) {
-    formattedOtherNames += '\n## Other Names';
+    formattedOtherNames += '\n## Other Names\n';
     formattedOtherNames += otherNames.reduce((markdown, otherName) => (
-      `${markdown}\n  * ${nameTpl(otherName)}`
+      `${markdown}\n* ${nameTpl(otherName)}`
     ), '');
+    formattedOtherNames += '\n';
   }
 
   let formattedOtherEvents = '';
   const otherEvents = person.events.filter(({ type }) => type !== 'Birth' && type !== 'Death');
   formattedOtherEvents = otherEvents.reduce((markdown, event) => (
-    `${markdown}\n  * ${event.type}: ${eventTpl(event)}`
+    `${markdown}\n* ${event.type}: ${eventTpl(event)}  `
   ), '');
 
   let allCitations = [];
@@ -59,7 +60,7 @@ export default (person) => {
   if (allSources.length > 0) {
     formattedSources += '## Sources\n';
     allSources.forEach((source) => {
-      formattedSources += '\n  * ';
+      formattedSources += '\n* ';
       if (source.author) {
         formattedSources += source.author;
         if (source.title || source.pubInfo) {
@@ -83,7 +84,7 @@ export default (person) => {
         ({ source: citationSource, page }) => citationSource === source && page,
       );
       sourceCitations.forEach((citation) => {
-        formattedSources += '\n    * ';
+        formattedSources += '\n  * ';
         if (typeof citation.page === 'string' && citation.page.match(urlRegex)) {
           formattedSources += `[${citation.page}](${citation.page})`;
         } else {
@@ -99,13 +100,13 @@ export default (person) => {
 ${formattedOtherNames}
 ## Life Events  
 
-  * 🎂 Birth: ${birth}
-  * 🪦 Death: ${death}${formattedOtherEvents}
+* 🎂 Birth: ${birth}  
+* 🪦 Death: ${death}  ${formattedOtherEvents}
 
 ## Parents
 
-  * 👨 Father: ${fatherName}
-  * 👩 Mother: ${motherName}
+* 👨 Father: ${fatherName}  
+* 👩 Mother: ${motherName}  
 
 ${notes}${families}${formattedSources}`
     /* eslint-enable indent */

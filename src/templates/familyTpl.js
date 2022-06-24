@@ -14,9 +14,9 @@ export default (family, mainPerson) => {
   if (family.children.length > 0) {
     formattedChildren += '#### Children\n';
     family.children.forEach((child) => {
-      formattedChildren += `\n  * ${nameTpl(findPreferredName(child))}`;
+      formattedChildren += `\n* ${nameTpl(findPreferredName(child))}`;
     });
-    formattedChildren += '\n\n';
+    formattedChildren += '\n';
   }
 
   let formattedEvents = '';
@@ -24,11 +24,11 @@ export default (family, mainPerson) => {
     formattedEvents += '#### Family Events\n';
     const marriage = findEvent(family, 'Marriage');
     if (marriage) {
-      formattedEvents += `\n  * 💒 Marriage: ${eventTpl(marriage)}`;
+      formattedEvents += `\n* 💒 Marriage: ${eventTpl(marriage)}`;
     }
     const otherEvents = family.events.filter(({ type }) => type !== 'Marriage');
     otherEvents.forEach((event) => {
-      formattedEvents += `\n  * ${event.type}: ${eventTpl(event)}`;
+      formattedEvents += `\n* ${event.type}: ${eventTpl(event)}`;
     });
     formattedEvents += '\n\n';
   }
