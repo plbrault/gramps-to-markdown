@@ -1,15 +1,13 @@
-function formatNotes(obj) {
+export default (notes) => {
   let formattedNotes = '';
 
-  if (obj.notes.length > 0) {
+  if (notes.length > 0) {
     formattedNotes += '## Notes';
-    obj.notes.forEach(({ text }) => {
+    notes.forEach(({ text }) => {
       formattedNotes += `\n\n${text}`;
     });
     formattedNotes += '\n\n';
   }
 
   return formattedNotes;
-}
-
-export default formatNotes;
+};

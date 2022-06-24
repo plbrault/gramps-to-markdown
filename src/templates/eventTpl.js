@@ -1,6 +1,6 @@
-import formatPlace from './formatPlace.js';
+import placeTpl from './placeTpl.js';
 
-function formatEvent(event) {
+export default (event) => {
   let formattedEvent = '';
 
   if (event) {
@@ -17,13 +17,11 @@ function formatEvent(event) {
       formattedEvent += `**${event.dateVal.val}** `;
     }
     if (event.place) {
-      formattedEvent += `in **${formatPlace(event.place)}**`;
+      formattedEvent += `in **${placeTpl(event.place)}**`;
     }
   } else {
     formattedEvent = '**Unknown**';
   }
 
   return formattedEvent;
-}
-
-export default formatEvent;
+};

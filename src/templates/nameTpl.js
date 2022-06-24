@@ -1,4 +1,4 @@
-function formatName(name) {
+export default (name) => {
   let formattedName = '**';
 
   if (name) {
@@ -25,6 +25,4 @@ function formatName(name) {
   formattedName += '**';
 
   return formattedName;
-}
-
-export default formatName;
+};
