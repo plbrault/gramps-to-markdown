@@ -1,5 +1,6 @@
 import findEvent from './utilities/findEvent.js';
 import findPreferredName from './utilities/findPreferredName.js';
+
 import eventTpl from './eventTpl.js';
 import familiesTpl from './familiesTpl.js';
 import nameTpl from './nameTpl.js';

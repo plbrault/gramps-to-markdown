@@ -5,10 +5,7 @@ export default (event) => {
 
   if (event) {
     if (event.description) {
-      formattedEvent += `**${event.description}** `;
-      if (event.dateVal && !event.dateVal.type) {
-        formattedEvent += 'on ';
-      }
+      formattedEvent += `**${event.description}**: `;
     }
     if (event.dateVal) {
       if (event.dateVal.type) {
