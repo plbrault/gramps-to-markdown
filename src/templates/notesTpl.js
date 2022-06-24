@@ -6,7 +6,7 @@ export default (notes, { titleMarkdown = '##' } = {}) => {
     notes.forEach(({ text }) => {
       formattedNotes += `\n\n${text}`;
     });
-    formattedNotes += '\n\n';
+    formattedNotes += '\n';
   }
 
   return formattedNotes;

@@ -12,7 +12,7 @@ export default (family, mainPerson) => {
 
   let formattedChildren = '';
   if (family.children.length > 0) {
-    formattedChildren += '#### Children\n';
+    formattedChildren += '\n#### Children\n';
     family.children.forEach((child) => {
       formattedChildren += `\n* ${nameTpl(findPreferredName(child))}`;
     });
@@ -21,7 +21,7 @@ export default (family, mainPerson) => {
 
   let formattedEvents = '';
   if (family.events.length > 0) {
-    formattedEvents += '#### Family Events\n';
+    formattedEvents += '\n#### Family Events\n';
     const marriage = findEvent(family, 'Marriage');
     if (marriage) {
       formattedEvents += `\n* 💒 Marriage: ${eventTpl(marriage)}`;
@@ -30,14 +30,14 @@ export default (family, mainPerson) => {
     otherEvents.forEach((event) => {
       formattedEvents += `\n* ${event.type}: ${eventTpl(event)}`;
     });
-    formattedEvents += '\n\n';
+    formattedEvents += '\n';
   }
 
   return (
     /* eslint-disable indent */
-`### With ${otherPersonName}
-
-${formattedEvents}${formattedChildren}${notes}`
+`\n### With ${otherPersonName}
+${formattedEvents}${notes}${formattedChildren}
+`
     /* eslint-enable indent */
   );
 };

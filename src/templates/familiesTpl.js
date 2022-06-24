@@ -6,7 +6,7 @@ export default (families, mainPerson) => {
   if (families.length > 0) {
     formattedFamilies += '## Families';
     families.forEach((family) => {
-      formattedFamilies += `\n\n${familyTpl(family, mainPerson)}`;
+      formattedFamilies += `\n${familyTpl(family, mainPerson)}`;
     });
   }
 

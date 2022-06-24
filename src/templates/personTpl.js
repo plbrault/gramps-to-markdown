@@ -108,7 +108,8 @@ ${formattedOtherNames}
 * 👨 Father: ${fatherName}  
 * 👩 Mother: ${motherName}  
 
-${notes}${families}${formattedSources}`
+${notes}${families}${formattedSources}
+`
     /* eslint-enable indent */
   );
 };
