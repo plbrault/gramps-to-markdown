@@ -1,0 +1,16 @@
+{
+  "extends": "airbnb",
+  "env": {
+    "node": true,
+    "es2021": true,
+    "browser": false
+  },
+  "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "rules": {
+    "import/extensions": ["error", { "js": "always" }],
+    "no-console": "off"
+  }
+}

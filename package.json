@@ -5,16 +5,23 @@
   "main": "src/index.js",
   "repository": "https://github.com/plbrault/gramps-to-markdown",
   "author": "Pier-Luc Brault <pier-luc@brault.me>",
-  "license": "AGPL",
+  "license": "AGPL-3.0",
+  "engines": {
+    "node": ">=16.5"
+  },
   "devDependencies": {
+    "@babel/core": "^7.18.5",
+    "@babel/eslint-parser": "^7.18.2",
+    "@babel/preset-env": "^7.18.2",
     "eslint": "^8.2.0",
     "eslint-config-airbnb": "19.0.4",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-jsx-a11y": "^6.5.1",
-    "eslint-plugin-react": "^7.28.0",
-    "eslint-plugin-react-hooks": "^4.3.0"
+    "eslint-plugin-react": "^7.30.0",
+    "eslint-plugin-react-hooks": "^4.6.0"
   },
   "dependencies": {
+    "fast-xml-parser": "^4.0.8",
     "node-gzip": "^1.1.2"
   }
 }
