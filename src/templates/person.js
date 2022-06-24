@@ -34,7 +34,9 @@ export default ({ person }) => {
   }
 
   return (`# ${formattedName}
- 
+
+## Life Events  
+
   * 🎂 Birth: ${formattedBirth}
   * 🪦 Death: ${formattedDeath}
 
