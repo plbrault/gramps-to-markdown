@@ -1,3 +1,4 @@
+import fs from 'fs';
 import readXmlFromFile from './data/readXmlFromFile.js';
 import Database from './data/Database.js';
 import personTemplate from './templates/person.js';
@@ -17,3 +18,7 @@ console.log('------');
 console.log(personTemplate({ person: database.getPerson('I0126') }));
 console.log('------')
 console.log(personTemplate({ person: database.getPerson('I0354') }));
+
+const test = personTemplate({ person: database.getPerson('I0354') });
+
+fs.writeFile('testData/test.md', test, 'utf8', () => {});
