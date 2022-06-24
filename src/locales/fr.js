@@ -18,4 +18,5 @@ export default {
   'Family Events': 'Événements de la famille',
   Marriage: 'Mariage',
   Sources: 'Sources',
+  'All Individuals': 'Tous les individus',
 };
