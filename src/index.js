@@ -12,13 +12,8 @@ if (inputFile === undefined) {
 const xmlData = await readXmlFromFile(inputFile);
 const database = new Database(xmlData);
 
-console.log('------');
-console.log(personTpl(database.getPerson('I0018')));
-console.log('------');
-console.log(personTpl(database.getPerson('I0126')));
-console.log('------');
-console.log(personTpl(database.getPerson('I0354')));
+database.getPeople().forEach((person) => {
+  console.log(personTpl(person));
+});
 
-const test = personTpl(database.getPerson('I0354'));
-
-fs.writeFile('testData/test.md', test, 'utf8', () => {});
+//fs.writeFile('testData/test.md', test, 'utf8', () => {});

@@ -30,7 +30,7 @@ function parseXml(xmlData) {
   return xmlParser.parse(xmlData);
 }
 
-function createObjects(rawData) {
+function createObjects(rawData, { includePrivateData }) {
   const objects = {};
 
   Object.keys(rawData.database)
@@ -38,9 +38,10 @@ function createObjects(rawData) {
     .forEach((key) => {
       const objType = Object.keys(rawData.database[key])[0];
       rawData.database[key][objType]
+        .filter((obj) => !obj.priv || includePrivateData)
         .forEach((obj) => {
           objects[obj.handle] = {
-            handle: obj.handle, type: objType, raw: obj, data: { isPrivate: !!obj.priv },
+            handle: obj.handle, type: objType, raw: obj, data: { },
           };
         });
     });
@@ -102,11 +103,11 @@ function createName(objects, nameRawData) {
   return name;
 }
 
-function createPeople(objects, { includePrivateData }) {
+function createPeople(objects) {
   const people = [];
 
   Object.values(objects)
-    .filter(({ type, data: { isPrivate } }) => type === 'person' && (!isPrivate || includePrivateData))
+    .filter(({ type }) => type === 'person')
     .forEach((person) => {
       Object.assign(person.data, {
         id: person.raw.id,
@@ -127,27 +128,37 @@ function createPeople(objects, { includePrivateData }) {
       }
       if (person.raw.eventref) {
         person.raw.eventref.forEach(({ hlink }) => {
-          person.data.events.push(objects[hlink].data);
+          if (objects[hlink]) {
+            person.data.events.push(objects[hlink].data);
+          }
         });
       }
       if (person.raw.citationref) {
         person.raw.citationref.forEach(({ hlink }) => {
-          person.data.citations.push(objects[hlink].data);
+          if (objects[hlink]) {
+            person.data.citations.push(objects[hlink].data);
+          }
         });
       }
       if (person.raw.childof) {
         person.raw.childof.forEach(({ hlink }) => {
-          person.data.childOf.push(objects[hlink].data);
+          if (objects[hlink]) {
+            person.data.childOf.push(objects[hlink].data);
+          }
         });
       }
       if (person.raw.parentin) {
         person.raw.parentin.forEach(({ hlink }) => {
-          person.data.parentIn.push(objects[hlink].data);
+          if (objects[hlink]) {
+            person.data.parentIn.push(objects[hlink].data);
+          }
         });
       }
       if (person.raw.noteref) {
         person.raw.noteref.forEach(({ hlink }) => {
-          person.data.notes.push(objects[hlink].data);
+          if (objects[hlink]) {
+            person.data.notes.push(objects[hlink].data);
+          }
         });
       }
 
@@ -157,11 +168,11 @@ function createPeople(objects, { includePrivateData }) {
   return people;
 }
 
-function createEvents(objects, { includePrivateData }) {
+function createEvents(objects) {
   const events = [];
 
   Object.values(objects)
-    .filter(({ type, data: { isPrivate } }) => type === 'event' && (!isPrivate || includePrivateData))
+    .filter(({ type }) => type === 'event')
     .forEach((event) => {
       Object.assign(event.data, {
         id: event.raw.id,
@@ -174,14 +185,18 @@ function createEvents(objects, { includePrivateData }) {
         event.data.dateVal = event.raw.dateval;
       }
       if (event.raw.place) {
-        event.data.place = objects[event.raw.place.hlink].data;
+        if (objects[event.raw.place.hlink]) {
+          event.data.place = objects[event.raw.place.hlink].data;
+        }
       }
       if (event.raw.description) {
         event.data.description = event.raw.description['#text'];
       }
       if (event.raw.citationref) {
         event.raw.citationref.forEach(({ hlink }) => {
-          event.data.citations.push(objects[hlink].data);
+          if (objects[hlink]) {
+            event.data.citations.push(objects[hlink].data);
+          }
         });
       }
 
@@ -191,11 +206,11 @@ function createEvents(objects, { includePrivateData }) {
   return events;
 }
 
-function createPlaces(objects, { includePrivateData }) {
+function createPlaces(objects) {
   const places = [];
 
   Object.values(objects)
-    .filter(({ type, data: { isPrivate } }) => type === 'placeobj' && (!isPrivate || includePrivateData))
+    .filter(({ type }) => type === 'placeobj')
     .forEach((place) => {
       Object.assign(place.data, {
         id: place.raw.id,
@@ -227,17 +242,20 @@ function createPlaces(objects, { includePrivateData }) {
   return places;
 }
 
-function createCitations(objects, { includePrivateData }) {
+function createCitations(objects) {
   const citations = [];
 
   Object.values(objects)
-    .filter(({ type, data: { isPrivate } }) => type === 'citation' && (!isPrivate || includePrivateData))
+    .filter(({ type }) => type === 'citation')
     .forEach((citation) => {
       Object.assign(citation.data, {
         id: citation.raw.id,
         change: citation.raw.change,
-        source: objects[citation.raw.sourceref.hlink].data,
       });
+
+      if (objects[citation.raw.sourceref.hlink]) {
+        citation.data.source = objects[citation.raw.sourceref.hlink].data;
+      }
 
       if (citation.raw.page) {
         citation.data.page = citation.raw.page['#text'];
@@ -249,11 +267,11 @@ function createCitations(objects, { includePrivateData }) {
   return citations;
 }
 
-function createSources(objects, { includePrivateData }) {
+function createSources(objects) {
   const sources = [];
 
   Object.values(objects)
-    .filter(({ type, data: { isPrivate } }) => type === 'source' && (!isPrivate || includePrivateData))
+    .filter(({ type }) => type === 'source')
     .forEach((source) => {
       Object.assign(source.data, {
         id: source.raw.id,
@@ -276,11 +294,11 @@ function createSources(objects, { includePrivateData }) {
   return sources;
 }
 
-function createFamilies(objects, { includePrivateData }) {
+function createFamilies(objects) {
   const families = [];
 
   Object.values(objects)
-    .filter(({ type, data: { isPrivate } }) => type === 'family' && (!isPrivate || includePrivateData))
+    .filter(({ type }) => type === 'family')
     .forEach((family) => {
       Object.assign(family.data, {
         id: family.raw.id,
@@ -295,29 +313,41 @@ function createFamilies(objects, { includePrivateData }) {
         family.data.relationType = family.raw.rel.type;
       }
       if (family.raw.father) {
-        family.data.father = objects[family.raw.father.hlink].data;
+        if (objects[family.raw.father.hlink]) {
+          family.data.father = objects[family.raw.father.hlink].data;
+        }
       }
       if (family.raw.mother) {
-        family.data.mother = objects[family.raw.mother.hlink].data;
+        if (objects[family.raw.mother.hlink]) {
+          family.data.mother = objects[family.raw.mother.hlink].data;
+        }
       }
       if (family.raw.eventref) {
         family.raw.eventref.forEach(({ hlink }) => {
-          family.data.events.push(objects[hlink].data);
+          if (objects[hlink]) {
+            family.data.events.push(objects[hlink].data);
+          }
         });
       }
       if (family.raw.noteref) {
         family.raw.noteref.forEach(({ hlink }) => {
-          family.data.notes.push(objects[hlink].data);
+          if (objects[hlink]) {
+            family.data.notes.push(objects[hlink].data);
+          }
         });
       }
       if (family.raw.childref) {
         family.raw.childref.forEach(({ hlink }) => {
-          family.data.children.push(objects[hlink].data);
+          if (objects[hlink]) {
+            family.data.children.push(objects[hlink].data);
+          }
         });
       }
       if (family.raw.citationref) {
         family.raw.citationref.forEach(({ hlink }) => {
-          family.data.citations.push(objects[hlink].data);
+          if (objects[hlink]) {
+            family.data.citations.push(objects[hlink].data);
+          }
         });
       }
 
@@ -327,11 +357,11 @@ function createFamilies(objects, { includePrivateData }) {
   return families;
 }
 
-function createNotes(objects, { includePrivateData }) {
+function createNotes(objects) {
   const notes = [];
 
   Object.values(objects)
-    .filter(({ type, data: { isPrivate } }) => type === 'note' && (!isPrivate || includePrivateData))
+    .filter(({ type }) => type === 'note')
     .forEach((note) => {
       Object.assign(note.data, {
         id: note.raw.id,
@@ -350,15 +380,15 @@ function createNotes(objects, { includePrivateData }) {
 
 function prepareData(xmlData, { includePrivateData }) {
   const rawData = parseXml(xmlData);
-  const objects = createObjects(rawData);
+  const objects = createObjects(rawData, { includePrivateData });
 
   const people = createPeople(objects, { includePrivateData });
-  const events = createEvents(objects, { includePrivateData });
-  const places = createPlaces(objects, { includePrivateData });
-  const citations = createCitations(objects, { includePrivateData });
-  const sources = createSources(objects, { includePrivateData });
-  const families = createFamilies(objects, { includePrivateData });
-  const notes = createNotes(objects, { includePrivateData });
+  const events = createEvents(objects);
+  const places = createPlaces(objects);
+  const citations = createCitations(objects);
+  const sources = createSources(objects);
+  const families = createFamilies(objects);
+  const notes = createNotes(objects);
 
   const data = {
     people,

@@ -17,7 +17,9 @@ export default (name) => {
       }
     });
     formattedName = formattedName.slice(0, formattedName.length - 1);
-    formattedName += `, ${firstName.value}`;
+    if (firstName) {
+      formattedName += `, ${firstName.value}`;
+    }
   } else {
     formattedName += 'Unknown';
   }
