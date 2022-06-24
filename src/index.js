@@ -5,6 +5,7 @@ import getCreateLink from './getCreateLink.js';
 import getTranslate from './getTranslate.js';
 
 import personTpl from './templates/personTpl.js';
+import peopleTpl from './templates/peopleTpl.js';
 
 const [, , inputFile, outputDir = './output', optionsJSON = '{}'] = process.argv;
 
@@ -42,3 +43,15 @@ database.getPeople().forEach((person) => {
     });
   }
 });
+
+if (options.languages.length === 1) {
+  const markdown = peopleTpl(database.getPeople(), {
+    createLink: createLinkFunctions[0], t: translateFunctions[0],
+  });
+  fs.writeFileSync(`${outputDir}/individuals.md`, markdown, 'utf8');
+} else {
+  translateFunctions.forEach((t, id) => {
+    const markdown = peopleTpl(database.getPeople(), { createLink: createLinkFunctions[id], t });
+    fs.writeFileSync(`${outputDir}/individuals-${options.languages[id]}.md`, markdown, 'utf8');
+  });
+}
