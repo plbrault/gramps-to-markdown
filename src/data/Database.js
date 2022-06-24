@@ -356,7 +356,15 @@ function prepareData(xmlData, { includePrivateData }) {
   const families = createFamilies(objects, { includePrivateData });
   const notes = createNotes(objects, { includePrivateData });
 
-  const data = rawData;
+  const data = {
+    people,
+    events,
+    places,
+    citations,
+    sources,
+    families,
+    notes,
+  };
   return data;
 }
 
