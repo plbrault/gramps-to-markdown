@@ -4,6 +4,12 @@ function formatEvent(event) {
   let formattedEvent = '';
 
   if (event) {
+    if (event.description) {
+      formattedEvent += `**${event.description}** `;
+      if (event.dateVal && !event.dateVal.type) {
+        formattedEvent += 'on ';
+      }
+    }
     if (event.dateVal) {
       if (event.dateVal.type) {
         formattedEvent += `**${event.dateVal.type}** `;
