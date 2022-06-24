@@ -45,5 +45,7 @@ export default ({ person }) => {
   * 👨 Father: **${formattedFatherName}**
   * 👩 Mother: **${formattedMotherName}**
 
+## Families
+
  `);
 }
