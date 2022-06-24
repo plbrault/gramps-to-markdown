@@ -1,36 +1,47 @@
 import formatEvent from './utilities/formatEvent.js';
+import formatName from './utilities/formatName.js';
+import findPreferredName from './utilities/findPreferredName.js';
 
 export default ({ person }) => {
-  const preferredName = person.names.find(({ preferred }) => preferred);
-  const surnames = preferredName.parts.filter(({ partType }) => partType === 'surname');
-  const firstName = preferredName.parts.find(({ partType }) => partType === 'first');
-
-  let formattedName = '';
-  surnames.forEach((surname) => {
-    if (surname.prefix) {
-      formattedName += `${surname.value} `;
-    }
-    if (surname.value) {
-      formattedName += `${surname.value} `;
-    }
-    if (surname.connector) {
-      formattedName += `${surname.connector} `;
-    }
-  });
-  formattedName = formattedName.slice(0, formattedName.length - 1);
-  formattedName += `, ${firstName.value}`;
+  const formattedName = formatName(findPreferredName(person));
 
   const birth = person.events.find(({ type }) => type === 'Birth');
-  let formattedBirth = '';
+  let formattedBirth;
   if (birth) {
     formattedBirth = formatEvent(birth);
   } else {
-    formattedBirth = 'Unknown';
+    formattedBirth = '**Unknown**';
   }
 
-  return `# ${formattedName}
- 
-    * 🎂 Birth: ${formattedBirth}
+  const death = person.events.find(({ type }) => type === 'Death');
+  let formattedDeath;
+  if (death) {
+    formattedDeath = formatEvent(death);
+  } else {
+    formattedDeath = '**Unknown**';
+  }
 
- `;
+  const father = person.childOf[0]?.father;
+  let formattedFatherName = '**Unknown**';
+  if (father) {
+    formattedFatherName = formatName(findPreferredName(father));
+  }
+
+  const mother = person.childOf[0]?.mother;
+  let formattedMotherName = '**Unknown**';
+  if (mother) {
+    formattedMotherName = formatName(findPreferredName(mother));
+  }
+
+  return (`# ${formattedName}
+ 
+  * 🎂 Birth: ${formattedBirth}
+  * 🪦 Death: ${formattedDeath}
+
+## Parents
+
+  * 👨 Father: **${formattedFatherName}**
+  * 👩 Mother: **${formattedMotherName}**
+
+ `);
 }
