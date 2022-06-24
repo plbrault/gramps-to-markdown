@@ -2,6 +2,7 @@ import findEvent from './utilities/findEvent.js';
 import findPreferredName from './utilities/findPreferredName.js';
 import formatEvent from './utilities/formatEvent.js';
 import formatName from './utilities/formatName.js';
+import family from './family.js';
 
 export default ({ person }) => {
   const name = formatName(findPreferredName(person));
@@ -20,7 +21,7 @@ export default ({ person }) => {
 ## Parents
 
   * 👨 Father: ${fatherName}
-  * 👩 Mother: **${motherName}**
+  * 👩 Mother: ${motherName}
 
 ## Families
 

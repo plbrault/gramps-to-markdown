@@ -1,5 +1,8 @@
 function findPreferredName(person) {
-  return person.names.find(({ preferred }) => preferred);
+  if (person) {
+    return person.names.find(({ preferred }) => preferred);
+  }
+  return undefined;
 }
 
 export default findPreferredName;
