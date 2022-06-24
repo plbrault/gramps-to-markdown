@@ -6,6 +6,9 @@ import familiesTpl from './familiesTpl.js';
 import nameTpl from './nameTpl.js';
 import notesTpl from './notesTpl.js';
 
+// eslint-disable-next-line
+const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
+
 export default (person) => {
   const name = nameTpl(findPreferredName(person));
   const birth = eventTpl(findEvent(person, 'Birth'));
@@ -55,6 +58,28 @@ export default (person) => {
   let formattedSources = '';
   if (allSources.length > 0) {
     formattedSources += '## Sources\n';
+    allSources.forEach((source) => {
+      formattedSources += '\n  * ';
+      if (source.author) {
+        formattedSources += source.author;
+        if (source.title || source.pubInfo) {
+          formattedSources += ', ';
+        }
+      }
+      if (source.title) {
+        formattedSources += `*${source.title}*`;
+        if (source.pubInfo) {
+          formattedSources += ', ';
+        }
+      }
+      if (source.pubInfo) {
+        if (typeof source.pubInfo === 'string' && source.pubInfo.match(urlRegex)) {
+          formattedSources += `[${source.pubInfo}](${source.pubInfo})`;
+        } else {
+          formattedSources += source.pubInfo;
+        }
+      }
+    });
   }
 
   return (
