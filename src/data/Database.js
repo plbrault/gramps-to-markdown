@@ -134,7 +134,7 @@ function createPeople(objects, { includePrivateData }) {
         });
       }
       if (person.raw.parentin) {
-        person.raw.parentin.forEach(({ hlink }) => {
+        person.raw.parentin.forEach(({ hlink }) => {
           person.data.parentIn.push(objects[hlink].data);
         });
       }
@@ -272,7 +272,7 @@ function createSources(objects, { includePrivateData }) {
   return sources;
 }
 
-function createFamilies(objects, { includePrivateData }) {
+function createFamilies(objects, { includePrivateData }) {
   const families = [];
 
   Object.values(objects)
@@ -364,6 +364,7 @@ function prepareData(xmlData, { includePrivateData }) {
     sources,
     families,
     notes,
+    peopleByID: people.reduce((peopleByID, person) => ({ ...peopleByID, [person.id]: person }), {}),
   };
   return data;
 }
@@ -373,8 +374,14 @@ class Database {
 
   constructor(xmlData, { includePrivateData = false } = {}) {
     this.#data = prepareData(xmlData, { includePrivateData });
+  }
 
-    // console.log(this.#data.database.people);
+  getPeople() {
+    return this.#data.people;
+  }
+
+  getPerson(id) {
+    return this.#data.peopleByID[id];
   }
 }
 
