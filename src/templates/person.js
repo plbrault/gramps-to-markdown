@@ -2,6 +2,8 @@ import findEvent from './utilities/findEvent.js';
 import findPreferredName from './utilities/findPreferredName.js';
 import formatEvent from './utilities/formatEvent.js';
 import formatName from './utilities/formatName.js';
+import formatNotes from './utilities/formatNotes.js';
+
 import family from './family.js';
 
 export default ({ person }) => {
@@ -10,6 +12,7 @@ export default ({ person }) => {
   const death = formatEvent(findEvent(person, 'Death'));
   const fatherName = formatName(findPreferredName(person.childOf[0]?.father));
   const motherName = formatName(findPreferredName(person.childOf[0]?.mother));
+  const notes = formatNotes(person);
 
   let formattedOtherNames = '';
   const otherNames = person.names.filter(({ preferred }) => !preferred);
@@ -25,7 +28,9 @@ export default ({ person }) => {
     `${markdown}\n  * ${event.type}: ${formatEvent(event)}`
   ), '');
 
-  return (`# ${name}
+  /* eslint-disable indent */
+  return (
+`# ${name}
 ${formattedOtherNames}
 
 ## Life Events  
@@ -38,7 +43,9 @@ ${formattedOtherNames}
   * 👨 Father: ${fatherName}
   * 👩 Mother: ${motherName}
 
-## Families
+${notes}## Families
 
- `);
-}
+`
+  );
+  /* eslint-enable-indent */
+};
