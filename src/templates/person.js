@@ -11,12 +11,17 @@ export default ({ person }) => {
   const fatherName = formatName(findPreferredName(person.childOf[0]?.father));
   const motherName = formatName(findPreferredName(person.childOf[0]?.mother));
 
+  const otherEvents = person.events.filter(({ type }) => type !== 'Birth' && type !== 'Death');
+  const formattedOtherEvents = otherEvents.reduce((markdown, event) => (
+    `${markdown}\n  * ${event.type}: ${formatEvent(event)}`
+  ), '');
+
   return (`# ${name}
 
 ## Life Events  
 
   * 🎂 Birth: ${birth}
-  * 🪦 Death: ${death}
+  * 🪦 Death: ${death}${formattedOtherEvents}
 
 ## Parents
 
