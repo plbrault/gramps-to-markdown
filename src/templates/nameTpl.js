@@ -7,7 +7,7 @@ export default (name) => {
 
     surnames.forEach((surname) => {
       if (surname.prefix) {
-        formattedName += `${surname.value} `;
+        formattedName += `${surname.prefix} `;
       }
       if (surname.value) {
         formattedName += `${surname.value} `;
