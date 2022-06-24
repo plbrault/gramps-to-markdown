@@ -323,6 +323,25 @@ function createFamilies(objects) {
   return families;
 }
 
+function createNotes(objects) {
+  const notes = [];
+
+  Object.values(objects)
+    .filter(({ type }) => type === 'note')
+    .forEach((note) => {
+      Object.assign(note.data, {
+        id: note.raw.id,
+        change: note.raw.change,
+        type: note.raw.type,
+        text: note.raw.text['#text'],
+      });
+
+      notes.push(note.data);
+    });
+
+  return notes;
+}
+
 /* eslint-enable no-param-reassign */
 
 function prepareData(xmlData) {
@@ -335,8 +354,9 @@ function prepareData(xmlData) {
   const citations = createCitations(objects);
   const sources = createSources(objects);
   const families = createFamilies(objects);
+  const notes = createNotes(objects);
   
-  console.log(families);
+  console.log(notes);
 
   const data = rawData;
   return data;
