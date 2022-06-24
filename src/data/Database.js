@@ -6,6 +6,7 @@ function parseXml(xmlData) {
   const isAlwaysArray = [
     'database.people.person.name',
     'database.people.person.name.surname',
+    'database.people.person.name.citationref',
     'database.people.person.eventref',
     'database.people.person.citationref',
     'database.people.person.parentin',
@@ -47,11 +48,12 @@ function createObjects(rawData) {
   return objects;
 }
 
-function createName(nameRawData) {
+function createName(objects, nameRawData) {
   const name = {
     type: nameRawData.type,
     parts: [],
     preferred: !nameRawData.alt,
+    citations: [],
   };
   if (nameRawData.first) {
     name.parts.push({ partType: 'first', value: nameRawData.first['#text'] });
@@ -92,6 +94,11 @@ function createName(nameRawData) {
       name.parts.push(namePart);
     });
   }
+  if (nameRawData.citationref) {
+    nameRawData.citationref.forEach(({ hlink }) => {
+      name.citations.push(objects[hlink].data);
+    });
+  }
   return name;
 }
 
@@ -115,7 +122,7 @@ function createPeople(objects, { includePrivateData }) {
 
       if (person.raw.name) {
         person.raw.name.forEach((name) => {
-          person.data.names.push(createName(name));
+          person.data.names.push(createName(objects, name));
         });
       }
       if (person.raw.eventref) {

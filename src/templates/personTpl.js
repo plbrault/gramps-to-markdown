@@ -30,6 +30,22 @@ export default (person) => {
     `${markdown}\n  * ${event.type}: ${eventTpl(event)}`
   ), '');
 
+  let allCitations = [];
+  allCitations.push(...person.citations);
+  person.names.forEach((aName) => {
+    allCitations.push(...aName.citations);
+  });
+  person.events.forEach((event) => {
+    allCitations.push(...event.citations);
+  });
+  person.parentIn.forEach((family) => {
+    allCitations.push(...family.citations);
+  });
+  person.parentIn.forEach((family) => {
+    allCitations.push(...family.citations);
+  });
+  allCitations = [...new Set(allCitations)];
+
   return (
     /* eslint-disable indent */
 `# ${name}
