@@ -106,7 +106,7 @@ export default (person, { createLink, t, language, addFrontmatter, extraFrontmat
     frontmatter += 'type: person\n';
     frontmatter += `language: ${language}\n`;
     frontmatter += `id: ${person.id}\n`;
-    frontmatter += `name: ${name}\n`;
+    frontmatter += `name: ${name.replace(/\*\*/g, '')}\n`;
     Object.keys(extraFrontmatterFields).forEach((field) => {
       frontmatter += `${field}: ${extraFrontmatterFields[field]}\n`;
     });
