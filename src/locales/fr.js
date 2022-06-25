@@ -19,4 +19,5 @@ export default {
   Marriage: 'Mariage',
   Sources: 'Sources',
   'All Individuals': 'Tous les individus',
+  Unknown: 'Inconnu',
 };

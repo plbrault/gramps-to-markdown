@@ -18,7 +18,7 @@ export default (people, { createLink, t, language, addFrontmatter, extraFrontmat
 `${frontmatter}# ${t('All Individuals')}
 ${
   people
-    .map((person) => `${createLink(person, nameTpl(findPreferredName(person)))}`)
+    .map((person) => `${createLink(person, nameTpl(findPreferredName(person), { t }))}`)
     .sort()
     .reduce((markdown, personName) => `${markdown}\n* ${personName}`, '')
 }

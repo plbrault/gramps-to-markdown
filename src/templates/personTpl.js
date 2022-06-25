@@ -9,17 +9,19 @@ import notesTpl from './notesTpl.js';
 // eslint-disable-next-line
 const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
 
-export default (person, { createLink, t, language, addFrontmatter, extraFrontmatterFields }) => {
-  const name = nameTpl(findPreferredName(person));
+export default (person, {
+  createLink, t, language, addFrontmatter, extraFrontmatterFields,
+}) => {
+  const name = nameTpl(findPreferredName(person), { t });
   const birth = eventTpl(findEvent(person, 'Birth'), { t });
   const death = eventTpl(findEvent(person, 'Death'), { t });
   const fatherName = createLink(
     person.childOf[0]?.father,
-    nameTpl(findPreferredName(person.childOf[0]?.father)),
+    nameTpl(findPreferredName(person.childOf[0]?.father), { t }),
   );
   const motherName = createLink(
     person.childOf[0]?.mother,
-    nameTpl(findPreferredName(person.childOf[0]?.mother)),
+    nameTpl(findPreferredName(person.childOf[0]?.mother), { t }),
   );
   const notes = notesTpl(person.notes);
   const families = familiesTpl(person.parentIn, person, { createLink, t });
@@ -29,7 +31,7 @@ export default (person, { createLink, t, language, addFrontmatter, extraFrontmat
   if (otherNames.length > 0) {
     formattedOtherNames += `\n## ${t('Other Names')}\n`;
     formattedOtherNames += otherNames.reduce((markdown, otherName) => (
-      `${markdown}\n* ${nameTpl(otherName)}`
+      `${markdown}\n* ${nameTpl(otherName, { t })}`
     ), '');
     formattedOtherNames += '\n';
   }

@@ -7,14 +7,14 @@ import notesTpl from './notesTpl.js';
 
 export default (family, mainPerson, { createLink, t }) => {
   const otherPerson = (mainPerson === family.father ? family.mother : family.father);
-  const otherPersonName = createLink(otherPerson, nameTpl(findPreferredName(otherPerson)));
+  const otherPersonName = createLink(otherPerson, nameTpl(findPreferredName(otherPerson), { t }));
   const notes = notesTpl(family.notes, { titleMarkdown: '####' });
 
   let formattedChildren = '';
   if (family.children.length > 0) {
     formattedChildren += `\n#### ${t('Children')}\n`;
     family.children.forEach((child) => {
-      formattedChildren += `\n* ${createLink(child, nameTpl(findPreferredName(child)))}`;
+      formattedChildren += `\n* ${createLink(child, nameTpl(findPreferredName(child), { t }))}`;
     });
     formattedChildren += '\n';
   }

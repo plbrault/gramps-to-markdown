@@ -1,4 +1,4 @@
-export default (name) => {
+export default (name, { t }) => {
   let formattedName = '**';
 
   if (name) {
@@ -21,7 +21,7 @@ export default (name) => {
       formattedName += `, ${firstName.value}`;
     }
   } else {
-    formattedName += 'Unknown';
+    formattedName += t('Unknown');
   }
 
   formattedName += '**';

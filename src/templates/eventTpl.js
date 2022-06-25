@@ -17,7 +17,7 @@ export default (event, { t }) => {
       formattedEvent += `${t('in')} **${placeTpl(event.place)}**`;
     }
   } else {
-    formattedEvent = '**Unknown**';
+    formattedEvent = `**${t('Unknown')}**`;
   }
 
   return formattedEvent;
