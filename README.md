@@ -75,7 +75,15 @@ Options are provided as a JSON object (e.g. `'{ "languages": ["en", "fr"] }'`). 
       to ".html"). An empty string can be provided if no file extension should
       be included in the URLs.
     </td>
-  </tr>  
+  </tr>
+  <tr>
+    <td>includePrivateData</td>
+    <td>boolean</td>
+    <td>false</td>
+    <td>
+      Indicates whether or not data marked as private in the Gramps file should be included in the generated Markdown files.
+    </td>
+  </tr>
 </table>
 
 This is an extra usage example using all available options:
