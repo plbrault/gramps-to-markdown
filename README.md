@@ -89,7 +89,7 @@ Options are provided as a JSON object (e.g. `'{ "languages": ["en", "fr"] }'`). 
 This is an extra usage example using all available options:
 
 ```sh
-gramps2md genealogy.gramps myWebsite/genealogy '{ "urlPrefix": "/genealogy/", "urlExt": ".html", "languages": ["en", "fr"] }'
+gramps2md genealogy.gramps myWebsite/genealogy '{ "urlPrefix": "/genealogy/", "urlExt": ".html", "languages": ["en", "fr"], "includePrivateData": true }'
 ```
 
 ## Output Example
