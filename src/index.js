@@ -30,13 +30,14 @@ const options = {
   languages: ['en'],
   urlPrefix: '',
   urlExt: '.md',
+  includePrivateData: false,
   ...JSON.parse(optionsJSON),
 };
 
 console.log('Options used: ', options);
 
 const xmlData = await readXmlFromFile(inputFile);
-const database = new Database(xmlData);
+const database = new Database(xmlData, { includePrivateData: options.includePrivateData });
 
 const translateFunctions = options.languages.map((language) => getTranslate({ locale: language }));
 const createLinkFunctions = options.languages.map((language) => getCreateLink(language, options));
