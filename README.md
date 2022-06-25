@@ -160,6 +160,8 @@ Such a file is generated for each person in the provided Gramps file.
 An `individuals.md` file containing a list of all individuals with
 links to their files is also generated.
 
+An example of a website integration is available [here](https://plbrault.com/genealogy-en/).
+
 ## License
 
 Copyright © 2022 Pier-Luc Brault <pier-luc@brault.me>
