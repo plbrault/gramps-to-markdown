@@ -9,7 +9,7 @@ import notesTpl from './notesTpl.js';
 // eslint-disable-next-line
 const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
 
-export default (person, { createLink, t }) => {
+export default (person, { createLink, t, language, addFrontmatter, extraFrontmatterFields }) => {
   const name = nameTpl(findPreferredName(person));
   const birth = eventTpl(findEvent(person, 'Birth'), { t });
   const death = eventTpl(findEvent(person, 'Death'), { t });
@@ -100,9 +100,22 @@ export default (person, { createLink, t }) => {
     });
   }
 
+  let frontmatter = '';
+  if (addFrontmatter) {
+    frontmatter += '---\n';
+    frontmatter += 'type: person\n';
+    frontmatter += `language: ${language}\n`;
+    frontmatter += `id: ${person.id}\n`;
+    frontmatter += `name: ${name}\n`;
+    Object.keys(extraFrontmatterFields).forEach((field) => {
+      frontmatter += `${field}: ${extraFrontmatterFields[field]}\n`;
+    });
+    frontmatter += '---\n\n';
+  }
+
   return (
     /* eslint-disable indent */
-`# ${name}
+`${frontmatter}# ${name}
 ${formattedOtherNames}
 ## ${t('Life Events')}  
 

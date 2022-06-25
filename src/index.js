@@ -55,6 +55,7 @@ database.getPeople().forEach((person) => {
     const markdown = personTpl(person, {
       createLink: createLinkFunctions[0],
       t: translateFunctions[0],
+      language: options.languages[0],
       addFrontmatter,
       extraFrontmatterFields,
     });
@@ -64,7 +65,11 @@ database.getPeople().forEach((person) => {
   } else {
     translateFunctions.forEach((t, id) => {
       const markdown = personTpl(person, {
-        createLink: createLinkFunctions[id], t, addFrontmatter, extraFrontmatterFields,
+        createLink: createLinkFunctions[id],
+        t,
+        language: options.languages[id],
+        addFrontmatter,
+        extraFrontmatterFields,
       });
       const filename = `${outputDir}/${person.id}-${options.languages[id]}.md`;
       fs.writeFileSync(filename, markdown, 'utf8');
@@ -77,6 +82,7 @@ if (options.languages.length === 1) {
   const markdown = peopleTpl(database.getPeople(), {
     createLink: createLinkFunctions[0],
     t: translateFunctions[0],
+    language: options.languages[0],
     addFrontmatter,
     extraFrontmatterFields,
   });
@@ -86,7 +92,11 @@ if (options.languages.length === 1) {
 } else {
   translateFunctions.forEach((t, id) => {
     const markdown = peopleTpl(database.getPeople(), {
-      createLink: createLinkFunctions[id], t, addFrontmatter, extraFrontmatterFields,
+      createLink: createLinkFunctions[id],
+      t,
+      language: options.languages[id],
+      addFrontmatter,
+      extraFrontmatterFields,
     });
     const filename = `${outputDir}/individuals-${options.languages[id]}.md`;
     fs.writeFileSync(filename, markdown, 'utf8');
