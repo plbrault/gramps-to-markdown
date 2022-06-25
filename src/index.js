@@ -17,7 +17,7 @@ function printUsage() {
   console.log('Examples:');
   console.log('    gramps2md genealogy.gramps');
   console.log('    gramps2md genealogy.gramps output');
-  console.log('    gramps2md genealogy.gramps output \'{ "urlPrefix": "/genealogy", "urlExt": ".html", "languages": ["en", "fr"] }\'');
+  console.log('    gramps2md genealogy.gramps output \'{ "urlPrefix": "/genealogy/", "urlExt": ".html", "languages": ["en", "fr"] }\'');
 }
 
 if (inputFile === undefined) {
