@@ -97,7 +97,9 @@ function createName(objects, nameRawData) {
   }
   if (nameRawData.citationref) {
     nameRawData.citationref.forEach(({ hlink }) => {
-      name.citations.push(objects[hlink].data);
+      if (objects[hlink] && objects[objects[hlink].raw.sourceref.hlink]) {
+        name.citations.push(objects[hlink].data);
+      }
     });
   }
   return name;
@@ -135,7 +137,7 @@ function createPeople(objects) {
       }
       if (person.raw.citationref) {
         person.raw.citationref.forEach(({ hlink }) => {
-          if (objects[hlink]) {
+          if (objects[hlink] && objects[objects[hlink].raw.sourceref.hlink]) {
             person.data.citations.push(objects[hlink].data);
           }
         });
@@ -194,7 +196,7 @@ function createEvents(objects) {
       }
       if (event.raw.citationref) {
         event.raw.citationref.forEach(({ hlink }) => {
-          if (objects[hlink]) {
+          if (objects[hlink] && objects[objects[hlink].raw.sourceref.hlink]) {
             event.data.citations.push(objects[hlink].data);
           }
         });
@@ -345,7 +347,7 @@ function createFamilies(objects) {
       }
       if (family.raw.citationref) {
         family.raw.citationref.forEach(({ hlink }) => {
-          if (objects[hlink]) {
+          if (objects[hlink] && objects[objects[hlink].raw.sourceref.hlink]) {
             family.data.citations.push(objects[hlink].data);
           }
         });
