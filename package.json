@@ -1,6 +1,6 @@
 {
   "name": "gramps-to-markdown",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "type": "module",
   "main": "src/index.js",
   "repository": "https://github.com/plbrault/gramps-to-markdown",
