@@ -13,6 +13,7 @@ function parseXml(xmlData) {
     'database.people.person.childof',
     'database.people.person.noteref',
     'database.events.event.citationref',
+    'database.events.event.noteref',
     'database.places.placeobj.pname',
     'database.places.placeobj.placeref',
     'database.families.family.eventref',
@@ -181,6 +182,7 @@ function createEvents(objects) {
         change: event.raw.change,
         type: event.raw.type['#text'],
         citations: [],
+        notes: [],
       });
 
       if (event.raw.dateval) {
@@ -198,6 +200,13 @@ function createEvents(objects) {
         event.raw.citationref.forEach(({ hlink }) => {
           if (objects[hlink] && objects[objects[hlink].raw.sourceref.hlink]) {
             event.data.citations.push(objects[hlink].data);
+          }
+        });
+      }
+      if (event.raw.noteref) {
+        event.raw.noteref.forEach(({ hlink }) => {
+          if (objects[hlink]) {
+            event.data.notes.push(objects[hlink].data);
           }
         });
       }
