@@ -23,7 +23,7 @@ export default (person, {
     person.childOf[0]?.mother,
     nameTpl(findPreferredName(person.childOf[0]?.mother), { t }),
   );
-  const notes = notesTpl(person.notes);
+  const notes = notesTpl([...person.notes, ...(person.events.map((event) => event.notes))].flat());
   const families = familiesTpl(person.parentIn, person, { createLink, t });
 
   let formattedOtherNames = '';
